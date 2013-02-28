@@ -1,4 +1,3 @@
-
 def argsParser(commandArgs):
     import sys,getopt
     opts, args = getopt.getopt(sys.argv[1:], "i:h:t:")
@@ -65,39 +64,36 @@ def createFirewall(filterName):
     filterUUIDO = os.popen('uuidgen %s' % filterName).read()
     filterUUID = filterUUIDO[:-1] 
     print "filteruuid is :%s" % filterUUID 
-    firewallFile = file('/etc/libvirt/nwfilter/%s.xml' % filterName,'w')
     
+#    firewallFile = file('/etc/libvirt/nwfilter/%s.xml' % filterName,'w')
+    '''prepare the filter file content'''
     line1 = "<filter name='%s' chain='root'>\n" % filterName
     line2 = "  <uuid>%s</uuid>\n" % filterUUID
     line3 = "  <filterref filter='nova-base'/>\n"
     line4 = "</filter>"
     lines = [line1,line2,line3,line4]
-
-    for line in lines:
-        print line
-        firewallFile.write(line)
-
-    firewallFile.close()
+ 
+    with file('/etc/libvirt/nwfilter/%s.xml' % filterName,'w') as firewallFile :
+        for line in lines:
+            print line
+            firewallFile.write(line)
     
-    checkXMLFile = file('/etc/libvirt/nwfilter/%s.xml' % filterName,'r')
-    print 'The XML file is :'
-    for line in checkXMLFile.readlines():
-        print line
-    checkXMLFile.close()
-#    os.popen(createFilterFile)
-    
+    with file('/etc/libvirt/nwfilter/%s.xml' % filterName,'r') as checkXMLFile :
+        print 'The XML file is :'
+        for line in checkXMLFile.readlines():
+            print line    
 
 def getMacAndIp(instanceName):
     import re
-    filterfile = file('/var/lib/nova/instances/%s/libvirt.xml' % instanceName,'r')
-    content = filterfile.readlines()
     macLine = ''
     IPLine = ''
-    for line in content:
-        if 'mac' in line:
-            macLine = line
-        elif 'IP' in line:
-            IPLine = line
+    with file('/var/lib/nova/instances/%s/libvirt.xml' % instanceName,'r') as filterfile :
+        content = filterfile.readlines()
+            for line in content:
+                if 'mac' in line:
+                    macLine = line
+                elif 'IP' in line:
+                    IPLine = line
 
     pattanGetMac = re.compile(r'address\s*=\s*\'(.+)\'')
     pattanGetIP = re.compile(r'value\s*=\s*\"(.+)\"')
@@ -140,15 +136,13 @@ def getTenantNameByInstanceID(instanceID):
 def updateVMConf(displayName,instanceMac,instanceIP,instanceTenantName):
     line = '\n%s,%s.novalocal,%s' % (instanceMac,displayName,instanceIP)
     confFile = '/var/lib/nova/networks/nova-br%s.conf' % instanceTenantName 
-    conf = file(confFile,'a')
-    conf.write(line)
-    conf.close()
+    with file(confFile,'a') as conf :
+        conf.write(line)
 
-    chackConf = file(confFile,'r')
-    lines = chackConf.readlines()
-    for line in lines:
-        print line
-    chackConf.close() 
+    with file(confFile,'r') as chackConf :
+        lines = chackConf.readlines()
+        for line in lines:
+            print line 
 
 def linkLibvirt(instanceName):
     import os
