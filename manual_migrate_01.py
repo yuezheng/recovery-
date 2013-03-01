@@ -64,7 +64,7 @@ def getFirewallName(instanceName):
 def createFirewall(filterName):
     import os 
     filterUUIDO = os.popen('uuidgen %s' % filterName).read()
-    filterUUID = filterUUIDO[:-1] 
+    filterUUID = filterUUIDO.strip()
     print "filteruuid is :%s" % filterUUID 
     
 #    firewallFile = file('/etc/libvirt/nwfilter/%s.xml' % filterName,'w')
