@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 def argsParser(commandArgs):
     import sys,getopt
     opts, args = getopt.getopt(sys.argv[1:], "i:h:t:")
