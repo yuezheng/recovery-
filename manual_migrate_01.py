@@ -62,8 +62,9 @@ def getFirewallName(instanceName):
 
 
 def createFirewall(filterName):
-    import os 
-    filterUUIDO = os.popen('uuidgen %s' % filterName).read()
+    from subprocess import Popen,PIPE
+    execute = Popen('uuidgen %s' % filterName,shell=True,stdout=PIPE,stderr=PIPE)
+    filterUUIDO = execute.stdout.read()
     filterUUID = filterUUIDO.strip()
     print "filteruuid is :%s" % filterUUID 
     
