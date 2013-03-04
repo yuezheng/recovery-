@@ -149,8 +149,9 @@ def updateVMConf(displayName,instanceMac,instanceIP,instanceTenantName):
 
 def linkLibvirt(instanceName):
     import os
-    print os.popen('/etc/init.d/libvirt-bin restart')
-    print os.popen('cd /var/lib/nova/instances/%s/ ;virsh define libvirt.xml;virsh start %s' % (instanceName,instanceName)) 
+    print os.popen('/etc/init.d/libvirt-bin restart').read()
+    print os.popen('cd /var/lib/nova/instances/%s/ ;virsh define libvirt.xml;virsh start %s' % (instanceName,instanceName)).read()
+    
 
 def main():
     args = sys.argv[1:]
