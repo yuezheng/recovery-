@@ -5,4 +5,4 @@ disaster recovery the openstack instances
 
 
 usage:
-python manual_migrate_01.py -i instanceUuid -h destionHostName -t tenantName
+python manual_migrate_01.py -i instanceUuid -h destinationHostName -t tenantName
