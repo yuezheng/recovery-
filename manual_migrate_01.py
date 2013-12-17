@@ -173,7 +173,7 @@ def main():
         instanceMac = address['Mac']
         instanceIP = address['IP']
         print 'this instance mac is : %s \n ip is :%s' %(instanceMac,instanceIP)
-#       instanceTenantName = getTenantNameByInstanceID(instanceID)
+        instanceTenantName = getTenantNameByInstanceID(instanceID)
         updateVMConf(displayName,instanceMac,instanceIP,instanceTenantName)
         linkLibvirt(instanceName)
     else :
